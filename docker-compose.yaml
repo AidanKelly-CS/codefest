@@ -1,0 +1,26 @@
+version: '3'
+
+networks:
+  codefellas:
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: codefellas_backend
+    restart: unless-stopped
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      - db
+    networks:
+      - codefellas
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: secret
