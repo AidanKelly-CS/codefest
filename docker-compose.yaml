@@ -9,18 +9,21 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: codefellas_backend
-    restart: unless-stopped
     ports:
       - '5000:5000'
     volumes:
       - ./backend:/usr/src/app
-    depends_on:
-      - db
+    command: 'flask run --host 0.0.0.0 --port 5000'
     networks:
       - codefellas
 
   db:
     image: postgres
-    restart: always
     environment:
-      POSTGRES_PASSWORD: secret
+      - POSTGRES_USER=hello_flask
+      - POSTGRES_PASSWORD=hello_flask
+      - POSTGRES_DB=hello_flask_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/db:/var/lib/postgresql/data
