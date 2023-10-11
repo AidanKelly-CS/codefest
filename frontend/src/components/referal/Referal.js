@@ -6,7 +6,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Referal({ name, location, age, difficulty, isFlagged, date, eligibleForSupport, isProcessed, virtual, inPerson, timeAM, timePM }) {
 
-  var eligible = false;
+  const [supportStatus, setSupportStatus] = useState(null);
+
+  const handleSupportStatusChange = (event) => {
+    const value = event.target.value;
+    setSupportStatus(value);
+    console.log(supportStatus);
+  };
+
 
   const [Eligible, setIsEligible] = useState(false); // State for the checkbox
 
@@ -23,14 +30,18 @@ function Referal({ name, location, age, difficulty, isFlagged, date, eligibleFor
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
   const handleSave = () => {
-    if(Eligible)
+    if(supportStatus === "eligible")
     {
       eligibleForSupport=true;
+      console.log(eligibleForSupport);
+    }else{
+      eligibleForSupport=false;
+      console.log(eligibleForSupport)
     }
     isProcessed=true;
     setShow2(false);
-    window.location.reload()}; //check if this still works once connected to database
-
+    //window.location.reload()}; //check if this still works once connected to database
+  }
     return (
       <>
       {isProcessed==false &&
@@ -40,6 +51,7 @@ function Referal({ name, location, age, difficulty, isFlagged, date, eligibleFor
           <p>Location: {location}</p>
           <p>Age: {age}</p>
           <p>Difficulty: {difficulty}</p>
+          <p>Is it eligible: {eligibleForSupport.toString()}</p>
           <Button variant="primary" onClick={handleShow}>
             View Details
           </Button>
@@ -100,7 +112,7 @@ function Referal({ name, location, age, difficulty, isFlagged, date, eligibleFor
 
     <hr/>
 
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    {/* <div style={{ display: 'flex', alignItems: 'center' }}>
   <h5 style={{ marginRight: '10px' }}>Eligible for Support</h5>
   <input 
     type="checkbox"
@@ -118,7 +130,34 @@ function Referal({ name, location, age, difficulty, isFlagged, date, eligibleFor
     onChange={handleEligibleCheckboxChange} 
     checked={Eligible}
   />
+</div> */}
+
+
+<div style={{ display: 'flex', alignItems: 'center' }}>
+  <h5 style={{ marginRight: '10px' }}>Eligible for Support</h5>
+  <input 
+    type="radio"
+    name="supportStatus"
+    value="eligible"
+    onChange={handleSupportStatusChange} 
+    checked={supportStatus === 'eligible'}
+  />
 </div>
+
+<div style={{ display: 'flex', alignItems: 'center' }}>
+  <h5 style={{ marginRight: '10px' }}>Not Eligible for Support</h5>
+  <input 
+    type="radio"
+    name="supportStatus"
+    value="notEligible"
+    onChange={handleSupportStatusChange} 
+    checked={supportStatus === 'notEligible'}
+  />
+</div>
+
+
+
+
 
 <hr/>
 
