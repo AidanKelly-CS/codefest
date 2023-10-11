@@ -1,0 +1,29 @@
+version: '3'
+
+networks:
+  codefellas:
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: codefellas_backend
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./backend:/usr/src/app
+    command: 'flask run --host 0.0.0.0 --port 5000'
+    networks:
+      - codefellas
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=hello_flask
+      - POSTGRES_PASSWORD=hello_flask
+      - POSTGRES_DB=hello_flask_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/db:/var/lib/postgresql/data
