@@ -2,16 +2,24 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+
 class Referral(db.Model):
     __tablename__ = 'referrals'
-    
+
     id = db.Column(db.Integer, primary_key=True)
+    Date = db.Column(db.DateTime, default=datetime.utcnow())
+
+    FirstName = db.Column(db.String())
+    Surname = db.Column(db.String())
+    DateOfBirth = db.Column(db.Date())
+    Address = db.Column(db.String())
 
     GPName = db.Column(db.String())
     GPAddress = db.Column(db.String())
@@ -22,7 +30,7 @@ class Referral(db.Model):
     usedPsychologicalServices = db.Column(db.Boolean())
     MentalHealthDiagnosis = db.Column(db.Boolean())
     MentalHealthAssessment = db.Column(db.Boolean())
-    SelfHarm = db.column(db.Boolean())
+    SelfHarm = db.Column(db.Boolean())
     Medication = db.Column(db.Boolean())
     TraumaticExperience = db.Column(db.Boolean())
     ProfessionalsWorkingWithYou = db.Column(db.Boolean())

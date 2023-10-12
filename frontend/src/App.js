@@ -1,14 +1,33 @@
 import './App.css';
 import Table from './components/table/Table';
+import { useEffect, useState } from 'react';
 
 function App() {
 
+  const [referrals, setReferrals] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/referrals')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        setReferrals(data)
+      }).catch(err => {
+        console.error(err)
+      });
+  }, []);
+
+
   //fetch list of referals
-  const referrals = [
-    { name: 'John Doe', location: 'New York', age: 25, difficulty: 'Easy', isFlagged: false, date: '20/02/9999', isProcessed: false, eligibleForSupport: false, virtual: false, inPerson: false, timeAM: false, timePM: false},
-    { name: 'Jane Doe', location: 'San Francisco', age: 30, difficulty: 'Medium', isFlagged: false, date: '20/02/9999', isProcessed: false, eligibleForSupport: false, virtual: false, inPerson: false, timeAM: false, timePM: false},
-    { name: 'Jim Doe', location: 'Los Angeles', age: 35, difficulty: 'Hard', isFlagged: true, date: '20/02/9999', isProcessed: false, eligibleForSupport: false, virtual: false, inPerson: false, timeAM: false, timePM: false},
-  ];
+  // const referrals = [
+  //   { name: 'John Doe', location: 'New York', age: 25, difficulty: 'Easy', isFlagged: false, date: '20/02/9999', isProcessed: false, eligibleForSupport: false, virtual: false, inPerson: false, timeAM: false, timePM: false},
+  //   { name: 'Jane Doe', location: 'San Francisco', age: 30, difficulty: 'Medium', isFlagged: false, date: '20/02/9999', isProcessed: false, eligibleForSupport: false, virtual: false, inPerson: false, timeAM: false, timePM: false},
+  //   { name: 'Jim Doe', location: 'Los Angeles', age: 35, difficulty: 'Hard', isFlagged: true, date: '20/02/9999', isProcessed: false, eligibleForSupport: false, virtual: false, inPerson: false, timeAM: false, timePM: false},
+  // ];
+
+
+  
+
 
   return (
     <div>
