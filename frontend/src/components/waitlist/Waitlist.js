@@ -1,10 +1,10 @@
 // Define a Referal component
-import './referal.css';
+import './waitlist.css';
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Referal({ id, name, location, age, difficulty, isFlagged, date, eligibleForSupport, isProcessed, virtual, inPerson, timeAM, timePM, updateEligible, updateNotEligible }) {
+function Waitlist({ id, name, location, age, difficulty, isFlagged, date, eligibleForSupport, isProcessed, virtual, inPerson, timeAM, timePM, updateEligible }) {
 
   const [supportStatus, setSupportStatus] = useState(null);
 
@@ -21,18 +21,6 @@ function Referal({ id, name, location, age, difficulty, isFlagged, date, eligibl
     setIsEligible(event.target.checked);
   };
 
-  const [Virtual, setVirtual] = useState(false); // State for the checkbox
-
-  const handleVirtualCheckboxChange = (event) => {
-    setVirtual(event.target.checked);
-  };
-
-  const [inPersonCheckbox, setInPerson] = useState(false); // State for the checkbox
-
-  const handleInPersonCheckboxChange = (event) => {
-    setInPerson(event.target.checked);
-  };
-
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
 
@@ -44,19 +32,23 @@ function Referal({ id, name, location, age, difficulty, isFlagged, date, eligibl
   const handleSave = () => {
     if(supportStatus === "eligible")
     {
+      eligibleForSupport=true;
       console.log("hoho", id);
-      updateEligible(id, Virtual, inPersonCheckbox);
+      updateEligible(id);
+      console.log(eligibleForSupport);
     }else{
-      updateNotEligible(id);
-      console.log("Not Eligible hello");
+      eligibleForSupport=false;
+      console.log(eligibleForSupport)
     }
     isProcessed=true;
+    console.log(isProcessed)
     setShow2(false);
+    //window.location.reload()}; //check if this still works once connected to database
   }
 
     return (
       <>
-      {isProcessed==false &&
+      {isProcessed==true && eligibleForSupport==true &&
       <div class="container">
 
         <div class="box">
@@ -64,17 +56,25 @@ function Referal({ id, name, location, age, difficulty, isFlagged, date, eligibl
           <p>Location: {location}</p>
           <p>Age: {age}</p>
           <p>Difficulty: {difficulty}</p>
+          <u>Preferred Method of Treatment:</u>
+          {virtual == true &&
+          <li> Virtual</li>
+          }
+          {inPerson == true && 
+          <li> In person</li>
+          }
+          <br/>
           <Button variant="primary" onClick={handleShow}>
             View Details
           </Button>
         </div>
         <div class="box">
-          <p>Flagged: {isFlagged ? "Yes": "No"}</p>
+          <p>Flagged: {isFlagged}</p>
         </div>
         
-        <div class="boxProcess">
+        <div class="boxAssign">
         <Button variant="primary" onClick={handleShow2}>
-            Process this Referral
+            Assign Therapist
           </Button>
         </div>
 
@@ -82,7 +82,7 @@ function Referal({ id, name, location, age, difficulty, isFlagged, date, eligibl
           <p>Date: {date}</p>
         </div>
         <hr />
-
+s
       </div>}
     
     <Modal show={show} onHide={handleClose}>
@@ -178,18 +178,18 @@ function Referal({ id, name, location, age, difficulty, isFlagged, date, eligibl
   <h6 style={{ marginRight: '10px' }}>Virtual</h6>
   <input 
     type="checkbox"
-    name="Virtual"
-    onChange={handleVirtualCheckboxChange} 
-    checked={Virtual}
+    name="isEligibleCheckbox"
+    onChange={handleEligibleCheckboxChange} 
+    checked={Eligible}
   />
 </div>
 <div style={{ display: 'flex', alignItems: 'center' }}>
-  <h6 style={{ marginRight: '10px' }}>In Person</h6>
+  <h6 style={{ marginRight: '10px' }}>inPerson</h6>
   <input 
     type="checkbox"
-    name="inPersonCheckbox"
-    onChange={handleInPersonCheckboxChange} 
-    checked={inPersonCheckbox}
+    name="isEligibleCheckbox"
+    onChange={handleEligibleCheckboxChange} 
+    checked={Eligible}
   />
 </div>
 
@@ -210,4 +210,4 @@ function Referal({ id, name, location, age, difficulty, isFlagged, date, eligibl
     
   }
 
-  export default Referal;
+  export default Waitlist;
