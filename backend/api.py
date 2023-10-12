@@ -139,9 +139,10 @@ def get_all_referrals():
             'preferredTherapyMethod': referral.preferredTherapyMethod,
             'preferredTime': referral.preferredTime,
             'eligibleForSupport': referral.eligibleForSupport,
-            'isProcessed': referral.isProcessed
+            'isProcessed': referral.isProcessed,
+            'isFlagged': referral.PriorityScore >= 6
         }
-        if referral.PriorityScore > 6:
+        if referral.PriorityScore >= 6:
             referral_list.insert(0,current_referral)
         else:
             referral_list.append(current_referral)
