@@ -69,7 +69,7 @@ function Referal({ id, name, location, age, difficulty, isFlagged, date, eligibl
           </Button>
         </div>
         <div class="box">
-          <p>Flagged: {isFlagged}</p>
+          <p>Flagged: {isFlagged ? "Yes": "No"}</p>
         </div>
         
         <div class="boxProcess">

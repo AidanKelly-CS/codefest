@@ -1,17 +1,27 @@
 import './App.css';
 import React, { useState } from 'react';
 import Table from './components/table/Table';
+import { useEffect, useState } from 'react';
 
-  //fetch list of referals
-  const referrals = [
-    { id:0, name: 'John Doe', location: 'New York', age: 25, difficulty: 'Easy', isFlagged: false, date: '20/02/9999', isProcessed: false, eligibleForSupport: false, virtual: false, inPerson: false, timeAM: false, timePM: false},
-    { id:1, name: 'Jane Doe', location: 'San Francisco', age: 30, difficulty: 'Medium', isFlagged: false, date: '20/02/9999', isProcessed: false, eligibleForSupport: false, virtual: false, inPerson: false, timeAM: false, timePM: false},
-    { id:2, name: 'Jim Doe', location: 'Los Angeles', age: 35, difficulty: 'Hard', isFlagged: true, date: '20/02/9999', isProcessed: false, eligibleForSupport: false, virtual: false, inPerson: false, timeAM: false, timePM: false},
-  ];
+
+
+
 
   
 function App() {
-  const [data, setData] = useState(referrals);
+   const [referrals, setReferrals] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/referrals')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        setReferrals(data)
+      }).catch(err => {
+        console.error(err)
+      });
+  }, []);
+//   const [data, setData] = useState(referrals);
 
   function handleUpdateEligible(index, Virtual, inPerson) {
     var newReferrals = [...referrals];
@@ -20,14 +30,14 @@ function App() {
     console.log("Check here", Virtual);
     newReferrals[index].virtual = Virtual;
     newReferrals[index].inPerson = inPerson;
-    setData(newReferrals);
+    setReferrals(newReferrals);
   }
 
   function handleUpdateNotEligible(index) {
     var newReferrals = [...referrals];
     newReferrals[index].eligibleForSupport = false;
     newReferrals[index].isProcessed = true;
-    setData(newReferrals);
+    setReferrals(newReferrals);
   }
 
   const [activeTab, setActiveTab] = useState(1);
@@ -63,13 +73,13 @@ function App() {
         {activeTab === 1 && 
         (<div> 
           <h1>Pending Referrals</h1>
-            <Table typeOfTable='referral' data={data} updateEligible={(index, Virtual, inPerson) => handleUpdateEligible(index, Virtual, inPerson)} updateNotEligible={(index) => handleUpdateNotEligible(index)} />
+            <Table typeOfTable='referral' data={referrals} updateEligible={(index, Virtual, inPerson) => handleUpdateEligible(index, Virtual, inPerson)} updateNotEligible={(index) => handleUpdateNotEligible(index)} />
           </div>
         )}
         {activeTab === 2 && 
         (<div> 
           <h1>Therapist Waiting List</h1>
-            <Table typeOfTable='waitlist' data={data} updateEligible={(index) => handleUpdateEligible(index)} updateNotEligible={(index) => handleUpdateNotEligible(index)} />
+            <Table typeOfTable='waitlist' data={referrals} updateEligible={(index) => handleUpdateEligible(index)} updateNotEligible={(index) => handleUpdateNotEligible(index)} />
           </div>
         )}
         {/* {activeTab === 3 && <div>Content for Tab 3</div>} */}
