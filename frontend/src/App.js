@@ -1,30 +1,34 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Table from './components/table/Table';
-import { useEffect, useState } from 'react';
-
-
-
-
-
-  
 function App() {
    const [referrals, setReferrals] = useState([]);
 
-  useEffect(() => {
+
+  function fetchData(waitlist=false){
     fetch('http://localhost:5000/referrals')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-        setReferrals(data)
-      }).catch(err => {
-        console.error(err)
-      });
-  }, []);
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+
+      if(waitlist){
+        console.log("filtered data in fetch fcall")
+        data = data.filter(referral => referral.isProcessed && referral.eligibleForSupport)
+        console.log("filerted data", data)
+      }
+      setReferrals(data)
+    }).catch(err => {
+      console.error(err)
+    }); 
+  }
+
+  useEffect(fetchData, []);
 //   const [data, setData] = useState(referrals);
 
   function handleUpdateEligible(index, Virtual, inPerson) {
     var newReferrals = [...referrals];
+    console.log("newreferrals", newReferrals);
+    console.log("index", index);
     newReferrals[index].eligibleForSupport = true;
     newReferrals[index].isProcessed = true;
     console.log("Check here", Virtual);
@@ -44,6 +48,12 @@ function App() {
 
   const handleTabClick = (tabNumber) => {
     setActiveTab(tabNumber);
+    if(tabNumber == 2){
+      fetchData(true)
+      console.log("filtering data")
+    }else{
+      fetchData(false)
+    }
   };
 
   return (

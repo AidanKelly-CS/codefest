@@ -10,7 +10,8 @@ function Table({typeOfTable, data, updateEligible, updateNotEligible }) {
             (
             <Referal
             key={index}
-            id={referral.id}
+            dbId={referral.id}
+            id={index}
             name={referral.name}
             location={referral.location}
             age={referral.age}

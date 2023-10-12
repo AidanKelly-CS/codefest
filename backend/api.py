@@ -95,15 +95,19 @@ def update_referral(id):
     if not referral:
         return jsonify({'error': 'Referral not found'}), 404
 
-    name = request.json.get('name')
 
-    if not name:
-        return jsonify({'error': 'Name is required'}), 400
+    #eligible for support and isProcessed
+    
+    isProcessed = request.json.get('isProcessed')
+    eligibleForSupport = request.json.get('eligibleForSupport')
+    # preferredTherapyMethod = request.json.get('preferredTherapyMethod')
 
-    referral.name = name
+    referral.isProcessed = isProcessed
+    referral.eligibleForSupport = eligibleForSupport
+    # referral.preferredTherapyMethod = preferredTherapyMethod
     db.session.commit()
 
-    return jsonify({'id': referral.id, 'name': referral.name}), 200
+    return jsonify({'id': referral.id, 'isProcessed': referral.isProcessed}), 200
 
 
 

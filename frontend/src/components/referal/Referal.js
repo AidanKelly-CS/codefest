@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Referal({ id, name, location, age, difficulty, isFlagged, date, eligibleForSupport, isProcessed, virtual, inPerson, timeAM, timePM, updateEligible, updateNotEligible }) {
+function Referal({ dbId,id, name, location, age, difficulty, isFlagged, date, eligibleForSupport, isProcessed, virtual, inPerson, timeAM, timePM, updateEligible, updateNotEligible }) {
 
   const [supportStatus, setSupportStatus] = useState(null);
 
@@ -51,6 +51,28 @@ function Referal({ id, name, location, age, difficulty, isFlagged, date, eligibl
       console.log("Not Eligible hello");
     }
     isProcessed=true;
+
+    let data = {
+      "isProcessed": isProcessed,
+      "eligibleForSupport": supportStatus === "eligible"
+    }
+
+    fetch(`http://localhost:5000/referrals/${dbId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        console.log('Server response:', responseData);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+
     setShow2(false);
   }
 
